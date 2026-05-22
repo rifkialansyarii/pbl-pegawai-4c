@@ -11,7 +11,9 @@ use App\Http\Controllers\API\{
     RekapAbsensiController,
     DashboardController,
     PegawaiController,
-    AbsensiPegawaiController
+    AbsensiPegawaiController,
+    TugasKelasController,
+    MateriKelasController
 };
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -34,6 +36,8 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
 Route::middleware(['auth:sanctum', 'dosen'])->group(function () {
     Route::get('/dashboard/dosen', [DashboardController::class, 'dosen']);
+    Route::apiResource('/materi', MateriKelasController::class);
+    Route::apiResource('/tugas', TugasKelasController::class);
     Route::get('/absensi/rekap', [RekapAbsensiController::class, 'index']);
     Route::post('/kelas/start', [KelasSessionController::class, 'start']);
     Route::post('/kelas/end', [KelasSessionController::class, 'end']);
