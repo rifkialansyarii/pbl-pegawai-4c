@@ -38,4 +38,11 @@ Route::middleware(['auth:sanctum', 'dosen'])->group(function () {
     Route::post('/kelas/end', [KelasSessionController::class, 'end']);
     Route::post('/qr/generate', [QrController::class, 'generate']);
     Route::post('/absensi/manual', [AbsensiMahasiswaController::class, 'manual']);
+
+Route::middleware(['auth:sanctum'])->group(function () {
+        Route::post('/pegawai/absensi/masuk', [AbsensiPegawaiController::class, 'masuk']);
+        Route::post('/pegawai/absensi/keluar', [AbsensiPegawaiController::class, 'keluar']);
+        Route::get('/pegawai/absensi/hari-ini', [AbsensiPegawaiController::class, 'hariIni']);
+        Route::get('/pegawai/absensi/rekap', [AbsensiPegawaiController::class, 'rekap']);
+    });
 });

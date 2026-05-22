@@ -20,6 +20,7 @@ class Pegawai extends Model
         'alamat',
         'unit_kerja',
         'id_user',
+        'status_aktif',
     ];
 
     public function jabatan()

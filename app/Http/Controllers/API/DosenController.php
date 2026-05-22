@@ -4,32 +4,48 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Services\PegawaiService;
+use App\Models\Dosen;
 
 class DosenController extends Controller
 {
-    public function index(PegawaiService $service)
+    public function index()
     {
-        return response()->json($service->getAll());
+        return response()->json(
+            Dosen::with(['pegawai', 'user'])->get()
+        );
     }
 
-    public function show($id, PegawaiService $service)
+    public function show($id)
     {
-        return response()->json($service->getById($id));
+        return response()->json(
+            Dosen::with(['pegawai', 'user'])->findOrFail($id)
+        );
     }
 
-    public function store(Request $request, PegawaiService $service)
+    public function store(Request $request)
     {
-        return response()->json($service->create($request->all()), 201);
+        $dosen = Dosen::create($request->all());
+
+        return response()->json($dosen, 201);
     }
 
-    public function update($id, Request $request, PegawaiService $service)
+    public function update($id, Request $request)
     {
-        return response()->json($service->update($id, $request->all()));
+        $dosen = Dosen::findOrFail($id);
+
+        $dosen->update($request->all());
+
+        return response()->json($dosen);
     }
 
-    public function destroy($id, PegawaiService $service)
+    public function destroy($id)
     {
-        return response()->json($service->delete($id));
+        $dosen = Dosen::findOrFail($id);
+
+        $dosen->delete();
+
+        return response()->json([
+            'message' => 'Dosen deleted'
+        ]);
     }
 }

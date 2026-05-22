@@ -6,17 +6,34 @@ use Illuminate\Database\Eloquent\Model;
 
 class Dosen extends Model
 {
+    protected $connection = 'pegawai';
+
     protected $table = 'dosen';
 
-    protected $primaryKey = 'NIP_DOSEN';
-
-    public $incrementing = false;
-
-    protected $keyType = 'string';
+    protected $primaryKey = 'id_dosen';
 
     protected $fillable = [
-        'NIP_DOSEN',
-        'DOSEN_NAMA',
-        'ID_USER'
+        'id_pegawai',
+        'id_user',
+        'nama_dosen',
+        'panggilan',
+        'jk',
+        'nidn',
+        'nip_baru',
+        'email',
+        'alamat',
+        'id_jurusan',
+        'id_prodi',
+        'status_aktif',
     ];
+
+    public function pegawai()
+    {
+        return $this->belongsTo(Pegawai::class, 'id_pegawai', 'id_pegawai');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user', 'id');
+    }
 }

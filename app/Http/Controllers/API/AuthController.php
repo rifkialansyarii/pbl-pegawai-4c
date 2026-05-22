@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Pegawai;
+use App\Models\Dosen;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
@@ -24,12 +25,22 @@ class AuthController extends Controller
             ->where('id_user', $user->id)
             ->first();
 
+        $dosen = Dosen::where('id_user', $user->id)
+            ->where('id_user', $user->id)
+            ->first();
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'token' => $token,
             'user' => $user,
-            'pegawai' => $pegawai
+            'pegawai' => $pegawai,
+            'dosen' => $dosen,
+            'permissions' => [
+                'is_admin' => $user->role === 'admin',
+                'is_pegawai' => $pegawai !== null,
+                'is_dosen' => $dosen !== null,
+            ],
         ]);
     }
 }
