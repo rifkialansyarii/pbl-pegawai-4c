@@ -74,10 +74,6 @@ if ! grep -q "APP_KEY=base64:" .env; then
     docker compose -f docker-compose.yml exec php php artisan key:generate
 fi
 
-echo "Running database migrations and seeders..."
-docker compose -f docker-compose.yml exec php php artisan migrate:fresh --force
-docker compose -f docker-compose.yml exec php php artisan db:seed
-
 echo "Optimizing Laravel..."
 docker compose -f docker-compose.yml exec php php artisan config:clear
 docker compose -f docker-compose.yml exec php php artisan cache:clear
