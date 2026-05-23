@@ -74,6 +74,10 @@ if ! grep -q "APP_KEY=base64:" .env; then
     docker compose -f docker-compose.yml exec php php artisan key:generate
 fi
 
+echo "importing database...."
+docker compose -f docker-compose.yml exec -T mysql mysql -u root -psecret app < ./database/pegawai4c.sql
+
+
 echo "Optimizing Laravel..."
 docker compose -f docker-compose.yml exec php php artisan config:clear
 docker compose -f docker-compose.yml exec php php artisan cache:clear
