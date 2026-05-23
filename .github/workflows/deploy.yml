@@ -1,0 +1,26 @@
+name: Deploy API to PBL VPS Pegawai 4C
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy-to-vps-pbl:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy PBL Pegawai 4C
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: root
+          key: ${{ secrets.VPS_KELOMPOK2-4C }}
+          script: |
+            cd /root/kelompok2-4c/pbl-pegawai-4c
+            
+            git pull origin main
+            
+            docker compose -f docker-compose.prod.yml exec -T php composer install --no-interaction --prefer-dist --optimize-autoloader
+                        
+            docker compose -f docker-compose.prod.yml exec -T php php artisan optimize:clear
+
+            docker compose -f docker-compose.prod.yml exec -T mysql mysql -u root -psecret app < ./database/pegawai4c.sql

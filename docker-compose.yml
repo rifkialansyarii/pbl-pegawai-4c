@@ -26,8 +26,8 @@ services:
     restart: unless-stopped
 
     ports:
-      - "8871:80"
-      - "8873:443"
+      - "80:80"
+      - "9001:443"
 
     volumes:
       - ./:/var/www/html
@@ -61,7 +61,7 @@ services:
       - MYSQL_PASSWORD=${DB_PASSWORD:-secret}
 
     ports:
-      - "33061:3306"
+      - "3306"
 
     volumes:
       - ./database:/docker-entrypoint-initdb.d
