@@ -30,11 +30,11 @@ fi
 echo "Issue Certificate for SSL..."
 cp $NGINX_CONF_DIR/default.base.conf $NGINX_CONF_DIR/default.prod.conf
 
-docker compose -f docker-compose.prod.yml up nginx -d
+docker compose -f docker-compose.yml up nginx -d
 
 sleep 3
 
-docker compose -f docker-compose.prod.yml run --rm certbot certonly --webroot \
+docker compose -f docker-compose.yml run --rm certbot certonly --webroot \
     --webroot-path=/var/www/certbot \
     --email $EMAIL \
     -d $DOMAIN \
@@ -54,12 +54,12 @@ fi
 # START ALL CONTAINERS
 #######################
 echo "Starting Docker containers..."
-docker compose -f docker-compose.prod.yml up -d
+docker compose -f docker-compose.yml up -d
 
-docker compose -f docker-compose.prod.yml exec nginx nginx -s reload
+docker compose -f docker-compose.yml exec nginx nginx -s reload
 
 echo -n "Waiting for services to initialize."
-until docker compose -f docker-compose.prod.yml exec -T mysql mysqladmin ping -h"127.0.0.1" --silent; do
+until docker compose -f docker-compose.yml exec -T mysql mysqladmin ping -h"127.0.0.1" --silent; do
     echo -n "."
     sleep 2
 done
@@ -71,18 +71,18 @@ echo -e "\nDatabase is ready to accept connections!"
 ###########################################
 if ! grep -q "APP_KEY=base64:" .env; then
     echo "Generating application key..."
-    docker compose -f docker-compose.prod.yml exec php php artisan key:generate
+    docker compose -f docker-compose.yml exec php php artisan key:generate
 fi
 
 echo "Running database migrations and seeders..."
-docker compose -f docker-compose.prod.yml exec php php artisan migrate:fresh --force
-docker compose -f docker-compose.prod.yml exec php php artisan db:seed
+docker compose -f docker-compose.yml exec php php artisan migrate:fresh --force
+docker compose -f docker-compose.yml exec php php artisan db:seed
 
 echo "Optimizing Laravel..."
-docker compose -f docker-compose.prod.yml exec php php artisan config:clear
-docker compose -f docker-compose.prod.yml exec php php artisan cache:clear
-docker compose -f docker-compose.prod.yml exec php php artisan route:clear
-docker compose -f docker-compose.prod.yml exec php php artisan view:clear
+docker compose -f docker-compose.yml exec php php artisan config:clear
+docker compose -f docker-compose.yml exec php php artisan cache:clear
+docker compose -f docker-compose.yml exec php php artisan route:clear
+docker compose -f docker-compose.yml exec php php artisan view:clear
 
 echo "Setup complete!"
 echo "Your application is running at: https://$DOMAIN:9001"
