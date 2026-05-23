@@ -1,5 +1,5 @@
 #!/bin/bash
-DOMAIN="api-pegawai-4a.akufarish.my.id"
+DOMAIN="api-pegawai-4c.akufarish.my.id"
 EMAIL="bebuhan4c@yasudah.com"
 DATA_PATH="data"
 NGINX_CONF_DIR="docker/nginx"
